@@ -1,9 +1,9 @@
-
 #include <fstream>
-#define FICHIER_GRAPHE ”C01.txt”
 #include <iostream>
 #include "graphStruct.h"
 #include "constraintStruct.h"
+#define FICHIER_GRAPHE "C01.txt"
+using namespace std;
 
 int main () {
     // Déclaration graphe
