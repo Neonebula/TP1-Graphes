@@ -1,7 +1,8 @@
 #include <fstream>
 #include <iostream>
-#include "graphStruct.h"
 #include "constraintStruct.h"
+#include "graphStruct.h"
+
 #define FICHIER_GRAPHE "C01.txt"
 using namespace std;
 
@@ -48,16 +49,28 @@ int main () {
     } ;
     for ( int c = 1 ; c <= G->nbContraintes ; c++ ) {
         // 1 ligne pour chaque contrainte
-        fg >> G->contraintes[c]->code ;
-        switch ( G->contraintes[c]->code ) {
+        fg >> G->contraintes[c].code ;
+        switch ( G->contraintes[c].code ) {
             case 1 : // la tâche sommetX
             // ne peut commencer que si
             // la tâche sommetY est terminée
-            fg >> G->contraintes[c]->sommetX ;
-            fg >> G->contraintes[c]->sommetY ;
+            fg >> G->contraintes[c].sommetX ;
+            fg >> G->contraintes[c].sommetY ;
             break ;
         } ;
-    }
+    } ;
+    for ( int c = 1 ; c <= G->nbContraintes ; c++ ) {
+         int sommetY = G->contraintes[c].sommetX;
+         int sommetX = G->contraintes[c].sommetY;
 
+         G->MVal[sommetX][sommetY] = G->durees[sommetX] ;
+         G->MAdj[sommetX][sommetY] = true;
+    } ;
+    cout << "Val\t0\t1\t2\t3\t4" << endl;
+  /*  for (int ligne = 1 ; ligne <= G->nbSommets; ligne++){
+        for (int colonne = 1 ; colonne <= G->nbSommets; colonne++)
+        {
+        }
+    }*/
     return 1 ;
 }
