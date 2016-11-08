@@ -32,6 +32,7 @@ int main () {
     // Sommet 0 : début de projet
     // Sommets 1 à nbTaches : tâches
     // Sommet nbTaches+1(=nbSommets-1) : fin de projet
+
     for ( int s = 0 ; s < G->nbSommets ; s++ ) {
         G->MAdj[s] = new bool [ G->nbSommets ] ;
         G->MVal[s] = new int [ G->nbSommets ] ;
@@ -39,6 +40,7 @@ int main () {
             G->MAdj[s][extTerm] = false ;
         };
     };
+
     int tacheCourante ;
     int dureeTache ;
     for ( int t = 1 ; t <= G->nbTaches ; t++ ) {
@@ -47,6 +49,7 @@ int main () {
         fg >> dureeTache ;
         G->durees[tacheCourante] = dureeTache ;
     } ;
+
     for ( int c = 1 ; c <= G->nbContraintes ; c++ ) {
         // 1 ligne pour chaque contrainte
         fg >> G->contraintes[c].code ;
@@ -59,6 +62,7 @@ int main () {
             break ;
         } ;
     } ;
+
     for ( int c = 1 ; c <= G->nbContraintes ; c++ ) {
          int sommetY = G->contraintes[c].sommetX;
          int sommetX = G->contraintes[c].sommetY;
@@ -66,11 +70,28 @@ int main () {
          G->MVal[sommetX][sommetY] = G->durees[sommetX] ;
          G->MAdj[sommetX][sommetY] = true;
     } ;
-    cout << "Val\t0\t1\t2\t3\t4" << endl;
-  /*  for (int ligne = 1 ; ligne <= G->nbSommets; ligne++){
-        for (int colonne = 1 ; colonne <= G->nbSommets; colonne++)
-        {
+
+    for(int colonne = 1; colonne < G->nbSommets; colonne++) {
+        int ligne = 1;
+        bool trouve = true;
+        while(trouve && ligne < G->nbSommets) {
+            trouve = G->MAdj[colonne][ligne];
+            ligne++ ;
         }
-    }*/
+        if(ligne == G->nbSommets){
+            //G->MVal[0][0] = 0 ;
+            G->MAdj[0][colonne] = true;
+        }
+
+    }
+
+    for (int ligne = 0 ; ligne < G->nbSommets; ligne++){
+        for (int colonne = 0 ; colonne < G->nbSommets; colonne++)
+        {
+            cout << G->MAdj[ligne][colonne];
+            cout << "\t";
+        }
+        cout << endl;
+    }
     return 1 ;
 }
