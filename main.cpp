@@ -6,6 +6,49 @@
 #define FICHIER_GRAPHE "C01.txt"
 using namespace std;
 
+void calculRang(t_graphe *G) {
+    int rang[G->nbSommets];
+
+    // Initialisation des rang à -1 pour toutes les tâches sauf 0
+    for(int ligne=1; ligne < G->nbSommets; ligne++) {
+            rang[ligne] = -1;
+    }
+
+    // Tache 0 a le rang 0
+    rang[0] = 0;
+
+    for(int ligne=0; ligne < G->nbSommets; ligne++) {
+        for(int colonne=0; colonne < G->nbSommets; colonne++) {
+            if( G->MAdj[ligne][colonne] == 1 ) {
+                if(rang[ligne] != -1) {
+
+                }
+            }
+        }
+    }
+
+}
+
+int getNbAntecedants(t_graphe *G, int tache) {
+    int nbAntecedants = 0;
+    for(int i = 0; i < G->nbSommets; i++) {
+        if(G->MAdj[i][tache]) nbAntecedants++;
+    }
+    return nbAntecedants;
+}
+
+int* getAntecedant(t_graphe *G, int tache) {
+    int antecedants[getNbAntecedants(G, tache)];
+    int k = 0;
+    for(int i = 0; i < G->nbSommets; i++) {
+        if(G->MAdj[i][tache]) {
+            antecedants[k];
+            k++;
+        }
+    }
+    return antecedants;
+}
+
 int main () {
     // Déclaration graphe
     t_graphe * G = new t_graphe ;
@@ -47,6 +90,7 @@ int main () {
         // 1 ligne pour chaque tâche
         fg >> tacheCourante ;
         fg >> dureeTache ;
+        int nbAntecedants = 0;
         G->durees[tacheCourante] = dureeTache ;
     } ;
 
@@ -62,12 +106,14 @@ int main () {
             break ;
         } ;
     } ;
+
     //Initialisation du la matrice a zero
     for(int ligne=0; ligne < G->nbSommets; ligne++){
         for (int colonne=0; colonne < G->nbSommets; colonne++){
             G->MVal[ligne][colonne] = 0;
         }
     }
+
     //On rempli les matrices sauf pour la premiere ligne
     for ( int c = 1 ; c <= G->nbContraintes ; c++ ) {
          int sommetY = G->contraintes[c].sommetX;
@@ -76,6 +122,7 @@ int main () {
          G->MVal[sommetX][sommetY] = G->durees[sommetX] ;
          G->MAdj[sommetX][sommetY] = true;
     } ;
+
     //Cas premiere ligne
     for(int colonne = 1; colonne < G->nbSommets-1; colonne++) {
         int ligne = 1;
@@ -91,6 +138,7 @@ int main () {
             G->MAdj[0][colonne] = true;
         }
     }
+
     //Cas derniere colonne
     for(int ligne = 1; ligne < G->nbSommets-1; ligne++) {
         int colonne = 1;
@@ -106,9 +154,27 @@ int main () {
             G->MAdj[ligne][6] = true;
         }
     }
+
+         // Affichage Matrice adjacence
+    cout << "Adj" << "\t";
+    for(int ligne = 0; ligne < G->nbSommets; ligne++) cout << ligne << "\t";
+    cout << endl;
+    for (int ligne = 0 ; ligne < G->nbSommets; ligne++){
+        cout << ligne << "\t";
+        for (int colonne = 0 ; colonne < G->nbSommets; colonne++)
+        {
+            cout << G->MAdj[ligne][colonne];
+            cout << "\t";
+
+        }
+        cout << endl;
+    }
+
+    cout << "\n" << endl;
+
     // Affichage Matrice valeur
     cout << "Val" << "\t";
-    for(int i = 0; i < G->nbSommets; i++) cout << i << "\t";
+    for(int ligne = 0; ligne < G->nbSommets; ligne++) cout << ligne << "\t";
     cout << endl;
     for (int ligne = 0 ; ligne < G->nbSommets; ligne++){
         cout << ligne << "\t";
@@ -124,21 +190,9 @@ int main () {
         cout << endl;
     }
 
-    cout << endl;
-
-     // Affichage Matrice adjacence
-    cout << "Adj" << "\t";
-    for(int i = 0; i < G->nbSommets; i++) cout << i << "\t";
-    cout << endl;
-    for (int ligne = 0 ; ligne < G->nbSommets; ligne++){
-        cout << ligne << "\t";
-        for (int colonne = 0 ; colonne < G->nbSommets; colonne++)
-        {
-            cout << G->MAdj[ligne][colonne];
-            cout << "\t";
-
-        }
-        cout << endl;
+    int* tab = getAntecedant(G, 2);
+    for(int i = 0; i < getNbAntecedants(G, 2); i++) {
+        cout << tab[i] << endl;
     }
 
     return 1 ;
