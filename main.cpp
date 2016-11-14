@@ -106,14 +106,40 @@ int main () {
             G->MAdj[ligne][6] = true;
         }
     }
-
+    // Affichage Matrice valeur
+    cout << "Val" << "\t";
+    for(int i = 0; i < G->nbSommets; i++) cout << i << "\t";
+    cout << endl;
     for (int ligne = 0 ; ligne < G->nbSommets; ligne++){
+        cout << ligne << "\t";
         for (int colonne = 0 ; colonne < G->nbSommets; colonne++)
         {
-            cout << G->MVal[ligne][colonne];
+            if(G->MAdj[ligne][colonne]) {
+                cout << G->MVal[ligne][colonne];
+
+            }
             cout << "\t";
+
         }
         cout << endl;
     }
+
+    cout << endl;
+
+     // Affichage Matrice adjacence
+    cout << "Adj" << "\t";
+    for(int i = 0; i < G->nbSommets; i++) cout << i << "\t";
+    cout << endl;
+    for (int ligne = 0 ; ligne < G->nbSommets; ligne++){
+        cout << ligne << "\t";
+        for (int colonne = 0 ; colonne < G->nbSommets; colonne++)
+        {
+            cout << G->MAdj[ligne][colonne];
+            cout << "\t";
+
+        }
+        cout << endl;
+    }
+
     return 1 ;
 }
