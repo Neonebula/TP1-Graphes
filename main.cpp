@@ -62,7 +62,13 @@ int main () {
             break ;
         } ;
     } ;
-
+    //Initialisation du la matrice a zero
+    for(int ligne=0; ligne < G->nbSommets; ligne++){
+        for (int colonne=0; colonne < G->nbSommets; colonne++){
+            G->MVal[ligne][colonne] = 0;
+        }
+    }
+    //On rempli les matrices sauf pour la premiere ligne
     for ( int c = 1 ; c <= G->nbContraintes ; c++ ) {
          int sommetY = G->contraintes[c].sommetX;
          int sommetX = G->contraintes[c].sommetY;
@@ -70,25 +76,41 @@ int main () {
          G->MVal[sommetX][sommetY] = G->durees[sommetX] ;
          G->MAdj[sommetX][sommetY] = true;
     } ;
-
-    for(int colonne = 1; colonne < G->nbSommets; colonne++) {
+    //Cas premiere ligne
+    for(int colonne = 1; colonne < G->nbSommets-1; colonne++) {
         int ligne = 1;
-        bool trouve = true;
-        while(trouve && ligne < G->nbSommets) {
-            trouve = G->MAdj[colonne][ligne];
-            ligne++ ;
-        }
-        if(ligne == G->nbSommets){
-            //G->MVal[0][0] = 0 ;
+        bool trouve = false;
+        do {
+            if(G->MAdj[ligne][colonne]) {
+                trouve = true;
+            }
+            ligne++;
+        } while(!trouve && ligne < G->nbSommets);
+        if(!trouve) {
+            G->MVal[0][colonne] = 0;
             G->MAdj[0][colonne] = true;
         }
-
+    }
+    //Cas derniere colonne
+    for(int ligne = 1; ligne < G->nbSommets-1; ligne++) {
+        int colonne = 1;
+        bool trouve = false;
+        do {
+            if(G->MAdj[ligne][colonne]) {
+                trouve = true;
+            }
+            colonne++;
+        } while(!trouve && colonne < G->nbSommets);
+        if(!trouve) {
+            G->MVal[ligne][6] = G->durees[ligne];
+            G->MAdj[ligne][6] = true;
+        }
     }
 
     for (int ligne = 0 ; ligne < G->nbSommets; ligne++){
         for (int colonne = 0 ; colonne < G->nbSommets; colonne++)
         {
-            cout << G->MAdj[ligne][colonne];
+            cout << G->MVal[ligne][colonne];
             cout << "\t";
         }
         cout << endl;
