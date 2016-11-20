@@ -288,11 +288,12 @@ void afficheMatriceValeurs(t_graphe * G){
 }
 
 void afficherDateAuPlusTot(t_graphe * G) {
-    cout << "+Tot" << "\t";
+    cout << "Date au plus Tot :" << endl;
+    cout << "Tache\t";
     for(int tache = 0; tache < G->nbSommets; tache++){
         cout << tache << "\t";
     }
-    cout << endl << "\t";
+    cout << endl << "Date\t";
     for(int tache = 0; tache < G->nbSommets; tache++){
         cout << G->datePlusTot[tache] << "\t";
     }
@@ -300,11 +301,12 @@ void afficherDateAuPlusTot(t_graphe * G) {
 }
 
 void afficherDateAuPlusTard(t_graphe * G) {
-    cout << "+Tard" << "\t";
+    cout << "Date au plus Tard :" << endl;
+    cout << "Tache\t";
     for(int tache = 0; tache < G->nbSommets; tache++){
         cout << tache << "\t";
     }
-    cout << endl << "\t";
+    cout << endl << "Date\t";
     for(int tache = 0; tache < G->nbSommets; tache++){
         cout << G->datePlusTard[tache] << "\t";
     }
@@ -312,11 +314,12 @@ void afficherDateAuPlusTard(t_graphe * G) {
 }
 
 void afficherMarge(t_graphe * G) {
-    cout << "Marges" << "\t";
+    cout << "Marges :" << endl;
+    cout << "Tache\t";
     for(int tache = 0; tache < G->nbSommets; tache++){
         cout << tache << "\t";
     }
-    cout << endl << "\t";
+    cout << endl << "Marge\t";
     for(int tache = 0; tache < G->nbSommets; tache++){
         cout << G->marges[tache] << "\t";
     }
