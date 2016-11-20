@@ -73,6 +73,14 @@ void calculRang(t_graphe *G) {
     }
 }
 
+int getNbRangs(t_graphe * G) {
+    int nbRangs = 0;
+    for(int i = 0; i < G->nbSommets; i++) {
+        if(G->MRang[i] > nbRangs) nbRangs = G->MRang[i];
+    }
+    return nbRangs;
+}
+
 void calculCalendrier(t_graphe * G){
   G->datePlusTot = new int[G->nbSommets];
   G->datePlusTard = new int[G->nbSommets];
@@ -108,6 +116,32 @@ void calculCalendrier(t_graphe * G){
   }
 
   //Calcul de la date au plus tard
+    for(int tache = 0; tache < G->nbSommets; tache++) {
+        G->datePlusTard[tache] = -1;
+    }
+    G->datePlusTard[G->nbSommets-1] = G->datePlusTot[G->nbSommets-1];
+
+    for(int rang = getNbRangs(G)-1; rang >= 0; rang--) {
+        for(int tache = 0; tache < G->nbSommets; tache++) {
+            if(G->MRang[tache] == rang) {
+                for(int successeur = 0; successeur < G->nbSommets; successeur++) {
+                    if(G->MAdj[tache][successeur]) {
+                        if(G->datePlusTard[tache] == -1) {
+                            G->datePlusTard[tache] = G->datePlusTard[successeur] - G->MVal[tache][successeur];
+                        } else if(G->datePlusTard[tache] > G->datePlusTard[successeur] - G->MVal[tache][successeur]) {
+                            G->datePlusTard[tache] = G->datePlusTard[successeur] - G->MVal[tache][successeur];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Calcul des marges
+    G->marges = new int[G->nbSommets];
+    for(int tache = 0; tache < G->nbSommets; tache++) {
+        G->marges[tache] = G->datePlusTard[tache] - G->datePlusTot[tache];
+    }
 
 }
 
@@ -253,6 +287,42 @@ void afficheMatriceValeurs(t_graphe * G){
   }
 }
 
+void afficherDateAuPlusTot(t_graphe * G) {
+    cout << "+Tot" << "\t";
+    for(int tache = 0; tache < G->nbSommets; tache++){
+        cout << tache << "\t";
+    }
+    cout << endl << "\t";
+    for(int tache = 0; tache < G->nbSommets; tache++){
+        cout << G->datePlusTot[tache] << "\t";
+    }
+    cout << endl << endl;
+}
+
+void afficherDateAuPlusTard(t_graphe * G) {
+    cout << "+Tard" << "\t";
+    for(int tache = 0; tache < G->nbSommets; tache++){
+        cout << tache << "\t";
+    }
+    cout << endl << "\t";
+    for(int tache = 0; tache < G->nbSommets; tache++){
+        cout << G->datePlusTard[tache] << "\t";
+    }
+    cout << endl << endl;
+}
+
+void afficherMarge(t_graphe * G) {
+    cout << "Marges" << "\t";
+    for(int tache = 0; tache < G->nbSommets; tache++){
+        cout << tache << "\t";
+    }
+    cout << endl << "\t";
+    for(int tache = 0; tache < G->nbSommets; tache++){
+        cout << G->marges[tache] << "\t";
+    }
+    cout << endl << endl;
+}
+
 int main () {
     // Déclaration graphe
     t_graphe * G = new t_graphe ;
@@ -264,6 +334,9 @@ int main () {
     calculRang(G);
     cout << "\n" << endl;
     calculCalendrier(G);
+    afficherDateAuPlusTot(G);
+    afficherDateAuPlusTard(G);
+    afficherMarge(G);
 
     return 1 ;
 }

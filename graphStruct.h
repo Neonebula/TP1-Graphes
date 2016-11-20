@@ -9,4 +9,5 @@ typedef struct {
     int* MRang;
     int* datePlusTot;
     int* datePlusTard;
+    int* marges;
 } t_graphe ;
