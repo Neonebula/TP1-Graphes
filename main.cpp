@@ -49,6 +49,60 @@ int* getAntecedant(t_graphe *G, int tache) {
     return antecedants;
 }*/
 
+int getNbAntecedants(t_graphe *G, int tache) {
+    int nbAntecedants = 0;
+    for(int s = 0; s < G->nbSommets; s++) {
+        if(G->MAdj[s][tache])
+          nbAntecedants++;
+    }
+    return nbAntecedants;
+}
+void fillTabAntecedants(t_graphe *G, int tache, int *tabAntecedant) {
+    int k = 0;
+    for(int s = 0; s < G->nbSommets; s++) {
+        if(G->MAdj[s][tache]) {
+            tabAntecedant[k]=s;
+            k++;
+        }
+    }
+}
+
+void calculRang(t_graphe *G) {
+    int rang[G->nbSommets];
+    //On part du principe que 0 est le premier sommet donc sans antécedant et par consequant le rang 0
+    rang[0] = 0;
+
+    //On initialise les autres rangs a -1
+    for(int r = 1; r < G->nbSommets-1; r++){
+      rang[r] = -1;
+    }
+
+    for (int ligne = 0; ligne < G->nbSommets-1; ligne++){
+      for (int colonne = 1; colonne < G->nbSommets-1; colonne++){
+        if(G->MAdj[ligne][colonne]){
+          int nbAntecedants = getNbAntecedants(G, colonne);
+          if(nbAntecedants==1){
+            rang[colonne] = rang[ligne] + 1;
+          }
+          else{
+            int tabAntecedant[getNbAntecedants(G, colonne)];
+            fillTabAntecedants(G, colonne, tabAntecedant);
+            int rangMax = tabAntecedant[0];
+            for(int a = 1; a < nbAntecedants; a++){
+              if(rang[tabAntecedant[a]]>rangMax) rangMax=rang[tabAntecedant[a]];
+            }
+            rang[colonne] = rangMax+1;
+          }
+        }
+      }
+    }
+
+    for(int r = 1; r < G->nbSommets-1; r++){
+      cout << rang[r] << endl;
+    }
+}
+
+
 void initGraphe(t_graphe * G){
   // Lecture du graphe sur fichier
   ifstream fg ( FICHIER_GRAPHE ) ;
@@ -121,6 +175,7 @@ void initGraphe(t_graphe * G){
   } ;
 
   //Cas premiere ligne
+  //On vérifie les sommets qui n'ont pas d'antecedants
   for(int colonne = 1; colonne < G->nbSommets-1; colonne++) {
       int ligne = 1;
       bool trouve = false;
@@ -137,6 +192,7 @@ void initGraphe(t_graphe * G){
   }
 
   //Cas derniere colonne
+  //On vérifie les sommets qui n'ont pas de successeurs
   for(int ligne = 1; ligne < G->nbSommets-1; ligne++) {
       int colonne = 1;
       bool trouve = false;
@@ -195,6 +251,8 @@ int main () {
     afficheMatriceAdjacence(G);
     cout << "\n" << endl;
     afficheMatriceValeurs(G);
+    cout << "\n" << endl;
+    calculRang(G);
 
     /*int* tab = getAntecedant(G, 2);
     for(int i = 0; i < getNbAntecedants(G, 2); i++) {
