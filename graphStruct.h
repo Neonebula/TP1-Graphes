@@ -6,4 +6,5 @@ typedef struct {
     int nbSommets ;
     bool** MAdj ;
     int** MVal ;
+    int* MRang;
 } t_graphe ;

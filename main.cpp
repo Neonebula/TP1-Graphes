@@ -6,49 +6,6 @@
 #define FICHIER_GRAPHE "C01.txt"
 using namespace std;
 
-/*void calculRang(t_graphe *G) {
-    int rang[G->nbSommets];
-
-    // Initialisation des rang � -1 pour toutes les t�ches sauf 0
-    for(int ligne=1; ligne < G->nbSommets; ligne++) {
-            rang[ligne] = -1;
-    }
-
-    // Tache 0 a le rang 0
-    rang[0] = 0;
-
-    for(int ligne=0; ligne < G->nbSommets; ligne++) {
-        for(int colonne=0; colonne < G->nbSommets; colonne++) {
-            if( G->MAdj[ligne][colonne] == 1 ) {
-                if(rang[ligne] != -1) {
-
-                }
-            }
-        }
-    }
-
-}
-
-int getNbAntecedants(t_graphe *G, int tache) {
-    int nbAntecedants = 0;
-    for(int i = 0; i < G->nbSommets; i++) {
-        if(G->MAdj[i][tache]) nbAntecedants++;
-    }
-    return nbAntecedants;
-}
-
-int* getAntecedant(t_graphe *G, int tache) {
-    int antecedants[getNbAntecedants(G, tache)];
-    int k = 0;
-    for(int i = 0; i < G->nbSommets; i++) {
-        if(G->MAdj[i][tache]) {
-            antecedants[k];
-            k++;
-        }
-    }
-    return antecedants;
-}*/
-
 int getNbAntecedants(t_graphe *G, int tache) {
     int nbAntecedants = 0;
     for(int s = 0; s < G->nbSommets; s++) {
@@ -68,13 +25,13 @@ void fillTabAntecedants(t_graphe *G, int tache, int *tabAntecedant) {
 }
 
 void calculRang(t_graphe *G) {
-    int rang[G->nbSommets];
+    G->MRang = new int [ G->nbSommets ];
     //On part du principe que 0 est le premier sommet donc sans antécedant et par consequant le rang 0
-    rang[0] = 0;
+    G->MRang[0] = 0;
 
-    //On initialise les autres rangs a -1
+    //On initialise les autres rangs a -1 pour les calculs
     for(int r = 1; r < G->nbSommets-1; r++){
-      rang[r] = -1;
+      G->MRang[r] = -1;
     }
 
     for (int ligne = 0; ligne < G->nbSommets-1; ligne++){
@@ -82,23 +39,23 @@ void calculRang(t_graphe *G) {
         if(G->MAdj[ligne][colonne]){
           int nbAntecedants = getNbAntecedants(G, colonne);
           if(nbAntecedants==1){
-            rang[colonne] = rang[ligne] + 1;
+            G->MRang[colonne] = G->MRang[ligne] + 1;
           }
           else{
             int tabAntecedant[getNbAntecedants(G, colonne)];
             fillTabAntecedants(G, colonne, tabAntecedant);
             int rangMax = tabAntecedant[0];
             for(int a = 1; a < nbAntecedants; a++){
-              if(rang[tabAntecedant[a]]>rangMax) rangMax=rang[tabAntecedant[a]];
+              if(G->MRang[tabAntecedant[a]]>rangMax) rangMax=G->MRang[tabAntecedant[a]];
             }
-            rang[colonne] = rangMax+1;
+            G->MRang[colonne] = rangMax+1;
           }
         }
       }
     }
 
     for(int r = 1; r < G->nbSommets-1; r++){
-      cout << rang[r] << endl;
+      cout << G->MRang[r] << endl;
     }
 }
 
