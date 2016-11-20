@@ -29,13 +29,13 @@ void calculRang(t_graphe *G) {
     //On part du principe que 0 est le premier sommet donc sans antécedant et par consequant le rang 0
     G->MRang[0] = 0;
 
-    //On initialise les autres rangs a -1 pour les calculs
+    //On initialise les autres rangs a -1 pour les comparaisons
     for(int r = 1; r < G->nbSommets-1; r++){
       G->MRang[r] = -1;
     }
 
     for (int ligne = 0; ligne < G->nbSommets-1; ligne++){
-      for (int colonne = 1; colonne < G->nbSommets-1; colonne++){
+      for (int colonne = 1; colonne < G->nbSommets; colonne++){
         if(G->MAdj[ligne][colonne]){
           int nbAntecedants = getNbAntecedants(G, colonne);
           if(nbAntecedants==1){
@@ -83,9 +83,6 @@ void calculCalendrier(t_graphe * G){
             }
           }
           G->datePlusTot[colonne] = dureeMax + G->datePlusTot[tacheLaPlusLongue];
-          if (colonne == 4){
-            cout << "dureeMax " << dureeMax << " tacheLaPlusLongue " << tacheLaPlusLongue << endl;
-          }
         }
       }
     }
@@ -245,11 +242,6 @@ int main () {
     calculRang(G);
     cout << "\n" << endl;
     calculCalendrier(G);
-
-    /*int* tab = getAntecedant(G, 2);
-    for(int i = 0; i < getNbAntecedants(G, 2); i++) {
-        cout << tab[i] << endl;
-    }*/
 
     return 1 ;
 }
