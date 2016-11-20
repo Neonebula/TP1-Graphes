@@ -44,7 +44,7 @@ void calculRang(t_graphe *G) {
           else{
             int tabAntecedant[getNbAntecedants(G, colonne)];
             fillTabAntecedants(G, colonne, tabAntecedant);
-            int rangMax = tabAntecedant[0];
+            int rangMax = G->MRang[tabAntecedant[0]];
             for(int a = 1; a < nbAntecedants; a++){
               if(G->MRang[tabAntecedant[a]]>rangMax) rangMax=G->MRang[tabAntecedant[a]];
             }
@@ -53,22 +53,42 @@ void calculRang(t_graphe *G) {
         }
       }
     }
-
-    for(int r = 1; r < G->nbSommets-1; r++){
-      cout << G->MRang[r] << endl;
-    }
 }
 
 void calculCalendrier(t_graphe * G){
-  G->MCalPlusTot = new int[G->nbSommets];
-  G->MCalPlusTard = new int[G->nbSommets];
+  G->datePlusTot = new int[G->nbSommets];
+  G->datePlusTard = new int[G->nbSommets];
 
   for (int t = 0; t < G->nbSommets; t++) {
-      G->MCalPlusTot[t]=0;
-      G->MCalPlusTard[t]=0;
+      G->datePlusTot[t]=0;
+      G->datePlusTard[t]=0;
   }
-  for (int t = 0; t < G->nbSommets; t++){
-    G->MCalPlusTot[]
+  for (int ligne = 1; ligne < G->nbSommets; ligne++){
+    for (int colonne = 1; colonne < G->nbSommets; colonne++){
+      if(G->MAdj[ligne][colonne]){
+        int nbAntecedants = getNbAntecedants(G, colonne);
+        if(nbAntecedants==1){
+          G->datePlusTot[colonne] = G->durees[ligne];
+        }
+        else{
+          int tabAntecedant[getNbAntecedants(G, colonne)];
+          fillTabAntecedants(G, colonne, tabAntecedant);
+          int dureeMax = G->durees[tabAntecedant[0]];
+          int tacheLaPlusLongue = 0;
+          for(int a = 1; a < nbAntecedants; a++){
+            if( G->durees[tabAntecedant[a]]>dureeMax)
+            {
+              dureeMax = G->durees[tabAntecedant[a]];
+              tacheLaPlusLongue = tabAntecedant[a];
+            }
+          }
+          G->datePlusTot[colonne] = dureeMax + G->datePlusTot[tacheLaPlusLongue];
+          if (colonne == 4){
+            cout << "dureeMax " << dureeMax << " tacheLaPlusLongue " << tacheLaPlusLongue << endl;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -223,6 +243,8 @@ int main () {
     afficheMatriceValeurs(G);
     cout << "\n" << endl;
     calculRang(G);
+    cout << "\n" << endl;
+    calculCalendrier(G);
 
     /*int* tab = getAntecedant(G, 2);
     for(int i = 0; i < getNbAntecedants(G, 2); i++) {

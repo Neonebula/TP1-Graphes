@@ -7,6 +7,6 @@ typedef struct {
     bool** MAdj ;
     int** MVal ;
     int* MRang;
-    int* MCalPlusTot;
-    int* MCalPlusTard;
+    int* datePlusTot;
+    int* datePlusTard;
 } t_graphe ;
