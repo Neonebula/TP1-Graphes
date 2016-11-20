@@ -24,6 +24,24 @@ void fillTabAntecedants(t_graphe *G, int tache, int *tabAntecedant) {
     }
 }
 
+int getNbSucesseurs(t_graphe *G, int tache) {
+    int nbSucesseurs = 0;
+    for(int s = 0; s < G->nbSommets; s++) {
+        if(G->MAdj[tache][s])
+          nbSucesseurs++;
+    }
+    return nbSucesseurs;
+}
+void fillTabSucesseurs(t_graphe *G, int tache, int *tabSucesseurs) {
+    int k = 0;
+    for(int s = 0; s < G->nbSommets; s++) {
+        if(G->MAdj[tache][s]) {
+            tabSucesseurs[k]=s;
+            k++;
+        }
+    }
+}
+
 void calculRang(t_graphe *G) {
     G->MRang = new int [ G->nbSommets ];
     //On part du principe que 0 est le premier sommet donc sans antécedant et par consequant le rang 0
@@ -42,7 +60,7 @@ void calculRang(t_graphe *G) {
             G->MRang[colonne] = G->MRang[ligne] + 1;
           }
           else{
-            int tabAntecedant[getNbAntecedants(G, colonne)];
+            int tabAntecedant[nbAntecedants];
             fillTabAntecedants(G, colonne, tabAntecedant);
             int rangMax = G->MRang[tabAntecedant[0]];
             for(int a = 1; a < nbAntecedants; a++){
@@ -63,6 +81,7 @@ void calculCalendrier(t_graphe * G){
       G->datePlusTot[t]=0;
       G->datePlusTard[t]=0;
   }
+  //Calcul de la date au plus tot
   for (int ligne = 1; ligne < G->nbSommets; ligne++){
     for (int colonne = 1; colonne < G->nbSommets; colonne++){
       if(G->MAdj[ligne][colonne]){
@@ -71,7 +90,7 @@ void calculCalendrier(t_graphe * G){
           G->datePlusTot[colonne] = G->durees[ligne];
         }
         else{
-          int tabAntecedant[getNbAntecedants(G, colonne)];
+          int tabAntecedant[nbAntecedants];
           fillTabAntecedants(G, colonne, tabAntecedant);
           int dureeMax = G->durees[tabAntecedant[0]];
           int tacheLaPlusLongue = 0;
@@ -87,6 +106,9 @@ void calculCalendrier(t_graphe * G){
       }
     }
   }
+
+  //Calcul de la date au plus tard
+
 }
 
 
