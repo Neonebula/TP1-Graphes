@@ -59,6 +59,19 @@ void calculRang(t_graphe *G) {
     }
 }
 
+void calculCalendrier(t_graphe * G){
+  G->MCalPlusTot = new int[G->nbSommets];
+  G->MCalPlusTard = new int[G->nbSommets];
+
+  for (int t = 0; t < G->nbSommets; t++) {
+      G->MCalPlusTot[t]=0;
+      G->MCalPlusTard[t]=0;
+  }
+  for (int t = 0; t < G->nbSommets; t++){
+    G->MCalPlusTot[]
+  }
+}
+
 
 void initGraphe(t_graphe * G){
   // Lecture du graphe sur fichier

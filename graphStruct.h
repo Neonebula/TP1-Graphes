@@ -7,4 +7,6 @@ typedef struct {
     bool** MAdj ;
     int** MVal ;
     int* MRang;
+    int* MCalPlusTot;
+    int* MCalPlusTard;
 } t_graphe ;
